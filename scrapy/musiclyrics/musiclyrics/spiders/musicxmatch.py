@@ -2,8 +2,8 @@ import scrapy
 from string import ascii_lowercase
 import time
 
-class LyricsSpider(scrapy.Spider):
-    name = "lyrics"
+class musicxmatch(scrapy.Spider):
+    name = "musicxmatch"
     allowed_domains = ["https://www.musixmatch.com","www.musixmatch.com"]
     # start_urls = list(["https://www.azlyrics.com/" + i + ".html" for i in ascii_lowercase])
     start_urls = ["https://www.musixmatch.com/explore/genre/Alternative/1"
@@ -47,7 +47,6 @@ class LyricsSpider(scrapy.Spider):
             yield from self.parse_title(response)
             for load_more_page in response.xpath("//a[@class='button page-load-more']"):
                 if load_more_page is not None:
-                    # time.sleep(1 )
                     print(load_more_page.attrib["href"])
                     next_page = self.allowed_domains[0] + load_more_page.attrib["href"]
                     yield scrapy.Request(next_page, callback=self.parse)
