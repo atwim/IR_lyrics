@@ -2,6 +2,7 @@ java_paths
 
 .idea/
 
+./**/venv
 ./**/venv/
 
 ./**/__pycache__/

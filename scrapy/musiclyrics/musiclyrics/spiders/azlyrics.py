@@ -6,6 +6,7 @@ import json
 
 class azlyrics(scrapy.Spider):
     name = "azlyrics"
+    rotate_user_agent = True
     allowed_domains = ["www.azlyrics.com"]
     # start_urls = list(["https://www.azlyrics.com/" + i + ".html" for i in ascii_lowercase])
     start_urls = ["https://www.azlyrics.com/a.html"]
