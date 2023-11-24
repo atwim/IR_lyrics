@@ -1,9 +1,11 @@
 <script>
+import SongCard from "@/components/SongCard.vue";
+
 export default {
+  components: {SongCard},
   data() {
     return {
       query: null,
-      q2: null,
       song_list: []
     }
   },
@@ -14,18 +16,10 @@ export default {
       if (this.query) {
         const res = await fetch(`http://localhost:8080/search/lyrics/${this.query}`)
         const songs = await res.json()
-        this.song_list = songs
+        this.song_list = songs;
       }
     }
   },
-
-  watch: {
-
-  }
-
-
-
-
 }
 
 </script>
@@ -53,9 +47,11 @@ export default {
   </v-btn>
 
 
-    {{query}}
-  <input v-model="q2" />
-  {{q2}}
+    print query: {{query}}
+
+    <SongCard v-for="song in song_list"
+                :song="song"
+                :key="song.id"></SongCard>
 
 </template>
 

@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <SearchEngineHomePage></SearchEngineHomePage>
-    <ResultCard></ResultCard>
+
     <v-row class="text-center">
       <v-col cols="12">
         <v-img
@@ -97,11 +97,11 @@
 <script>
 
 import SearchEngineHomePage from "@/components/SearchEngineHomePage.vue";
-import ResultCard from "@/components/ResultCard.vue";
+//import SongCard from "@/components/SongCard.vue";
 
 export default {
   name: 'HelloWorld',
-  components: {ResultCard, SearchEngineHomePage},
+  components: {SearchEngineHomePage},
 
   data: () => ({
     ecosystem: [

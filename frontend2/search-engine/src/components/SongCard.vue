@@ -1,5 +1,9 @@
-<script setup>
-
+<script>
+export default {
+  props: {
+    song: null
+  }
+}
 </script>
 
 <template>
@@ -11,6 +15,7 @@
     <v-card-item>
       <v-card-title>
         Song name
+        {{song.title}}
       </v-card-title>
       <v-card-subtitle>
         Card subtitle secondary text
@@ -21,6 +26,7 @@
     </v-card-item>
 
     <v-card-text>
+      {{song.text}}
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
     </v-card-text>
   </v-card>
