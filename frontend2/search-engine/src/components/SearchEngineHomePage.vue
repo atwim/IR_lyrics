@@ -1,6 +1,5 @@
 <script>
 import SongCard from "@/components/SongCard.vue";
-import Search from "@/models/Search";
 
 // 1.1 check that props song is working (songs are sent to SongCard)
 // 1.2 check logic for v-row
@@ -14,7 +13,8 @@ export default {
       query: null,
       loading: false,
       song_list: [],
-      submitted_query: false
+      submitted_query: false,
+      page_number: 1
     }
   },
 
@@ -27,15 +27,14 @@ export default {
       try {
         if (this.query) {
           // this loading is not used for now
-          const test = await Search.get()
-          console.log(test)
+
           this.loading=true
           this.submitted_query=true
-          this.song_list = await Search.custom("search/lyrics/" + this.query).get()
-          // const res =
-          //     await fetch(`http://localhost:8000/search/lyrics/${this.query}`)
-          // const songs = await res.json()
-          // this.song_list = songs;
+          // this.song_list = await Search.custom("search/lyrics/" + this.query).page(1).limit(20).post()
+          const res =
+              await fetch("http://localhost:8000/search/lyrics/" + this.query + "/?page=" + this.page_number + "&size=50")
+          const songs = await res.json()
+          this.song_list = songs.items;
         }
       } catch (err) {
         // TODO: handle the error

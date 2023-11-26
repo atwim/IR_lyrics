@@ -17,15 +17,8 @@ songs_data = data[["title", "artist", "lyrics"]]
 idx = ['d'+str(i) for i in range(len(lyrics))]
 docs_df = pd.DataFrame(np.column_stack((idx, lyrics)), columns = ['docno', 'lyrics'])
 
-indexer = pt.DFIndexer("./index_lyrics", overwrite=True)
-index_ref = indexer.index(docs_df["lyrics"], docs_df["docno"])
-
-indexer = pt.DFIndexer("./index_song_titles", overwrite=True)
-index_ref = indexer.index(data["title"], docs_df["docno"])
-
-
-
 song_info = []
+
 for i in range(0, len(data)):
   title, artist, lyrics, _ = data.iloc[i]
   docno = "d" + str(i)
@@ -72,12 +65,6 @@ indexer = pt.IterDictIndexer("./multi_index",meta={'docno': 20, 'title':10000, '
 RETRIEVAL_FIELDS = ['title', 'lyrics', 'artist']
 indexref1 = indexer.index(song_info, fields=RETRIEVAL_FIELDS)
 
-
-# doc_iter = data_doc_iter()
-# indexer = pt.IterDictIndexer("./multi_index")
-# indexref = indexer.index(doc_iter)
-
-# index = pt.IndexFactory.of(index_ref)
 
 bm25 = pt.BatchRetrieve(indexref1, wmodel="BM25")
 

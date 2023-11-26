@@ -4,7 +4,9 @@ import numpy as np
 import indexing_lyrics as il
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
+from pydantic import BaseModel, Field
+from fastapi_pagination.links import Page
+from fastapi_pagination import Page, add_pagination, paginate
 app = FastAPI()
 
 
@@ -31,13 +33,15 @@ app.add_middleware(
 #
 # index = il.pt.IndexFactory.of("./multi_index/data.properties")
 # bm25_multi_index = il.pt.BatchRetrieve(index, wmodel="BM25")
-@app.get("/search/lyrics/{query}")
-async def search_lyrics(query: str):
-    return il.retriever_song_title(il.bm25.search(query)).to_dict(orient="records")
+
+@app.get("/search/lyrics/{query}", response_model=Page[dict])
+async def search_lyrics(query:str):
+    return paginate(il.retriever_song_title(il.bm25.search(query)).to_dict(orient="records"))
     # return il.bm25.search(query).to_dict(orient="records")
 @app.get("/search")
 async def test_route():
     return "yes"
 
+add_pagination(app)
 # @app.get("/search/titles/{query}")
 # async def search_lyrics(query: str):
