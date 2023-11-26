@@ -1,6 +1,6 @@
 <script>
 import SongCard from "@/components/SongCard.vue";
-
+import Search from "@/models/Search";
 
 // 1.1 check that props song is working (songs are sent to SongCard)
 // 1.2 check logic for v-row
@@ -13,24 +13,33 @@ export default {
     return {
       query: null,
       loading: false,
-      song_list: []
+      song_list: [],
+      submitted_query: false
     }
   },
 
   methods: {
+
+
+
     async fetch_songs_by_query() {
       console.log('query: ', this.query);
       try {
         if (this.query) {
           // this loading is not used for now
+          const test = await Search.get()
+          console.log(test)
           this.loading=true
-          const res = await fetch(`http://localhost:8080/search/lyrics/${this.query}`)
-          const songs = await res.json()
-          this.song_list = songs;
+          this.submitted_query=true
+          this.song_list = await Search.custom("search/lyrics/" + this.query).get()
+          // const res =
+          //     await fetch(`http://localhost:8000/search/lyrics/${this.query}`)
+          // const songs = await res.json()
+          // this.song_list = songs;
         }
       } catch (err) {
         // TODO: handle the error
-        console.log("error occured");
+        console.log("error occured: ", err);
         this.song_list = [];
       } finally {
         // this loading is not used for now
@@ -72,14 +81,20 @@ export default {
     submit
   </v-btn>
 
+  <span v-if="submitted_query">
+    <span v-if="song_list.length">
+      <v-row v-for="song in song_list"
+             :key="song.id">
+        <SongCard   :song="song">
+        </SongCard>
+      </v-row>
+    </span>
 
-    print query: {{query}}
+    <span v-else>
+      No match found.
+    </span>
+  </span>
 
-    <v-row v-for="song in song_list"
-           :key="song.id">
-      <SongCard   :song="song">
-      </SongCard>
-    </v-row>
 </template>
 
 <style scoped>

@@ -1,19 +1,19 @@
 <template>
   <v-app>
     <v-main>
-      <HelloWorld/>
+      <SearchEngineHomePage/>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import SearchEngineHomePage from './components/SearchEngineHomePage.vue'
 
 export default {
   name: 'App',
 
   components: {
-    HelloWorld,
+    SearchEngineHomePage,
   },
 
   data: () => ({

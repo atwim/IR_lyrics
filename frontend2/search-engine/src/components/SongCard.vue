@@ -2,7 +2,8 @@
 export default {
   props: {
     song: null
-  }
+  },
+
 }
 </script>
 
@@ -14,11 +15,10 @@ export default {
   >
     <v-card-item>
       <v-card-title>
-        Song name
-        {{song.title}}
+        {{song.Title}}
       </v-card-title>
       <v-card-subtitle>
-        Card subtitle secondary text
+       {{song.Artist}}
       </v-card-subtitle>
       <v-card-subtitle>
         Card subtitle secondary text
@@ -26,8 +26,7 @@ export default {
     </v-card-item>
 
     <v-card-text>
-      {{song.text}}
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      {{song.Lyrics.split(" ").slice(0,100).join(" ") + "..."}}
     </v-card-text>
   </v-card>
 </template>
