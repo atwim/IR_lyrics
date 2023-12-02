@@ -124,11 +124,11 @@ results['cluster'] = kmeans.labels_
 # plot the results
 # colors = ['red', 'green']
 # cluster = ['Not Sarcastic', 'Sarcastic']
-for i in range(num_clusters):
-    plt.scatter(reduced_data[kmeans.labels_ == i, 0],
-                reduced_data[kmeans.labels_ == i, 1],
-
-                s=20
-                )
-plt.legend()
-plt.show()
+# for i in range(num_clusters):
+#     plt.scatter(reduced_data[kmeans.labels_ == i, 0],
+#                 reduced_data[kmeans.labels_ == i, 1],
+#
+#                 s=20
+#                 )
+# plt.legend()
+# plt.show()
