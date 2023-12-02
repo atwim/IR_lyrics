@@ -61,7 +61,7 @@ export default {
   <v-combobox
 
       auto-select-first
-      class="flex-full-width"
+      class="flex-full-width pa-4"
       density="comfortable"
       item-props
       hide-no-data
@@ -79,6 +79,12 @@ export default {
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
     </template>
+    <template v-slot:append>
+      <v-avatar>
+        <v-img src="https://cdn-icons-png.flaticon.com/512/3844/3844724.png"></v-img>
+      </v-avatar>
+    </template>
+
   </v-combobox>
 
 
@@ -93,7 +99,7 @@ export default {
     </span>
 
     <span v-else>
-      No match found.
+      Loading or No match found.
     </span>
   </span>
 

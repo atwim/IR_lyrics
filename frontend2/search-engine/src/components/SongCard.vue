@@ -9,8 +9,8 @@ export default {
 
 <template>
   <v-card
-      class="mx-auto my-8"
-      max-width="344"
+      class="mx-auto my-8 rounded-xl"
+      max-width="700"
       elevation="16"
   >
     <v-card-item>
@@ -20,9 +20,7 @@ export default {
       <v-card-subtitle>
        {{song.Artist}}
       </v-card-subtitle>
-      <v-card-subtitle>
-        Card subtitle secondary text
-      </v-card-subtitle>
+
     </v-card-item>
 
     <v-card-text>
