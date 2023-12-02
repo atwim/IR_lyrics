@@ -59,7 +59,7 @@ export default {
 
 <template>
   <v-combobox
-      
+
       auto-select-first
       class="flex-full-width"
       density="comfortable"
@@ -67,18 +67,21 @@ export default {
       hide-no-data
       menu-icon=""
       placeholder="Search a lyric"
-      prepend-inner-icon="mdi-magnify"
       clearable
       rounded
       v-model="query"
 
       theme="light"
       variant="solo"
-  ></v-combobox>
+  >
+    <template v-slot:prepend>
+      <v-btn @click="fetch_songs_by_query()" icon>
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+    </template>
+  </v-combobox>
 
-  <v-btn @click="fetch_songs_by_query()">
-    submit
-  </v-btn>
+
 
   <span v-if="submitted_query">
     <span v-if="song_list.length">
