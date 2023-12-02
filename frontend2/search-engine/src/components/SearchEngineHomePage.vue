@@ -89,19 +89,27 @@ export default {
 
 
 
-  <span v-if="submitted_query">
-    <span v-if="song_list.length">
-      <v-row v-for="song in song_list"
-             :key="song.id">
-        <SongCard   :song="song">
-        </SongCard>
-      </v-row>
-    </span>
-
-    <span v-else>
-      Loading or No match found.
-    </span>
-  </span>
+  <div v-if="submitted_query"
+       class="d-flex align-center justify-center">
+    <div v-if="loading">
+      <v-progress-circular
+          indeterminate
+          color="red"
+      ></v-progress-circular>
+    </div>
+    <div v-else>
+      <div v-if="song_list.length">
+        <v-row v-for="song in song_list" :key="song.id">
+          <v-col>
+            <SongCard :song="song"></SongCard>
+          </v-col>
+        </v-row>
+      </div>
+      <div v-else>
+        <v-alert type="info" class="my-4 rounded-xl" >No match found.</v-alert>
+      </div>
+    </div>
+  </div>
 
 </template>
 
