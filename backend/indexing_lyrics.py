@@ -105,34 +105,30 @@ pca = PCA(n_components=3)
 reduced_data = pca.fit_transform(vectorized_documents.toarray())
 
 # cluster the documents using k-means
-num_clusters = 15
+num_clusters = 5
 kmeans = KMeans(n_clusters=num_clusters, random_state=0)
 kmeans.fit(vectorized_documents)
 
 # create a dataframe to store the results
 results = pd.DataFrame()
-results['document'] = songs_data.title
+results['title'] = songs_data.title
 results['cluster'] = kmeans.labels_
-print(len(results['cluster']))
-# stemmed_lyrics = pd.concat([stemmed_lyrics, pd.DataFrame([["this is a song about things"]])], ignore_index=True)
-# kmeans.fit(vectorizer.fit_transform(vectorized_documents.toarray()))
-# results['document'] = songs_data.title
-# results['cluster'] = kmeans.labels_
 # print(len(results['cluster']))
 
 
 
 # print the results
+
 # print(results.sample(5))
 
 # plot the results
 # colors = ['red', 'green']
 # cluster = ['Not Sarcastic', 'Sarcastic']
-# for i in range(num_clusters):
-#     plt.scatter(reduced_data[kmeans.labels_ == i, 0],
-#                 reduced_data[kmeans.labels_ == i, 1],
-#
-#                 s=20
-#                 )
-# plt.legend()
-# plt.show()
+for i in range(num_clusters):
+    plt.scatter(reduced_data[kmeans.labels_ == i, 0],
+                reduced_data[kmeans.labels_ == i, 1],
+
+                s=20
+                )
+plt.legend()
+plt.show()

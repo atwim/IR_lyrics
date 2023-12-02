@@ -38,6 +38,23 @@ app.add_middleware(
 async def search_lyrics(query:str):
     return paginate(il.retriever_song_title(il.bm25.search(query)).to_dict(orient="records"))
     # return il.bm25.search(query).to_dict(orient="records")
+
+@app.get("/relevant-documents/{id}")
+async def search_lyrics(id:int):
+    label = il.results.iloc[id]["cluster"]
+    # print(label)
+    # print(il.results)
+    response = pd.DataFrame(il.results[il.results["cluster"] == label].index, columns=["docno"])
+    response = "d" + response["docno"].apply(str)
+    print(response)
+    print(il.retriever_song_title(pd.DataFrame(response)))
+    return il.retriever_song_title(pd.DataFrame(response, columns=["docno"])).to_dict(orient="records")
+
+    # return paginate(il.results[il.results["cluster"] == label].to_dict(orient="records"))
+    # return il.bm25.search(query).to_dict(orient="records")
+
+
+
 @app.get("/search")
 async def test_route():
     return "yes"
