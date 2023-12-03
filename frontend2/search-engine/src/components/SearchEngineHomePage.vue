@@ -2,11 +2,6 @@
 import SongCard from "@/components/SongCard.vue";
 import SongPage from "@/components/SongPage.vue";
 
-// 1.1 check that props song is working (songs are sent to SongCard)
-// 1.2 check logic for v-row
-// 2. review loading (show a loading while the songs are taken from backend)
-// 3. error handling
-
 export default {
   components: {SongPage, SongCard},
   data() {
@@ -22,10 +17,7 @@ export default {
   },
 
   methods: {
-
-
-
-    async fetch_songs_by_query() {
+   async fetch_songs_by_query() {
       //console.log('query: ', this.query);
       try {
         if (this.query) {
@@ -34,17 +26,11 @@ export default {
           this.submitted_query=true
           console.log(this.page_number);
           const res = await fetch(
-              "http://localhost:8000/search/lyrics/" +
-              this.query +
-              "/?page=" +
-              this.page_number +
-              "&size=10")
-
+              "http://localhost:8000/search/lyrics/" + this.query + "/?page=" + this.page_number + "&size=10")
           const songs = await res.json()
           this.song_list = songs.items;
           // in case we don't have a round number, give another page: 1.3 -> 2
           this.total_pages = Math.ceil(songs.total / 10);
-
         }
       } catch (err) {
         // TODO: handle the error
@@ -71,6 +57,7 @@ export default {
       this.fetch_songs_by_query();
     },
     getSongPage(song){
+     this.page_number = 1;
      this.selectedSong = song;
     }
   }
@@ -79,7 +66,6 @@ export default {
 </script>
 
 <template>
-
   <v-combobox
       auto-select-first
       class="flex-full-width pa-4"
@@ -92,17 +78,12 @@ export default {
       rounded
       v-model="query"
       theme="light"
-      variant="solo"
-  >
+      variant="solo">
     <template v-slot:prepend>
-      <v-btn @click="fetch_songs_by_query()" icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
+      <v-btn @click="fetch_songs_by_query()" icon> <v-icon>mdi-magnify</v-icon> </v-btn>
     </template>
     <template v-slot:append>
-      <v-avatar>
-        <v-img src="https://cdn-icons-png.flaticon.com/512/3844/3844724.png"></v-img>
-      </v-avatar>
+      <v-avatar><v-img src="https://cdn-icons-png.flaticon.com/512/3844/3844724.png"></v-img></v-avatar>
     </template>
   </v-combobox>
 
@@ -110,18 +91,12 @@ export default {
   <div v-if="submitted_query"
        class="d-flex align-center justify-center">
     <div v-if="loading">
-      <v-progress-circular
-          indeterminate
-          color="red"
-      ></v-progress-circular>
+      <v-progress-circular indeterminate color="red"></v-progress-circular>
     </div>
     <div v-else>
       <div v-if="song_list.length">
         <v-row v-for="song in song_list" :key="song.id">
-          <v-col>
-            <SongCard :song="song"
-                      @songCardClicked="getSongPage"></SongCard>
-          </v-col>
+          <v-col> <SongCard :song="song" @songCardClicked="getSongPage"></SongCard> </v-col>
         </v-row>
       </div>
       <div v-else>
@@ -140,19 +115,13 @@ export default {
 <!--  ></v-pagination>-->
 
     <div v-if="total_pages > 1"
-         class="d-flex align-center justify-center pa-4"
-    >
-      <v-btn @click="getPrevPage()">
-       PREV
-      </v-btn>
-      <v-btn @click="getNextPage()">
-        NEXT
-      </v-btn>
+         class="d-flex align-center justify-center pa-4">
+      <v-btn @click="getPrevPage()">PREV</v-btn>
+      <div><p class="pa-2">current page: {{page_number}} / {{total_pages}}</p></div>
+      <v-btn @click="getNextPage()">NEXT</v-btn>
     </div>
-
 </div>
 
-  <song-page v-if="selectedSong"
-             :selectedSong="selectedSong"></song-page>
+  <song-page v-if="selectedSong" :selectedSong="selectedSong"></song-page>
 
 </template>
