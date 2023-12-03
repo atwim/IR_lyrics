@@ -1,7 +1,7 @@
 <script>
 export default {
   props: {
-    song: Object
+    song: null
   }
 }
 </script>
@@ -23,11 +23,7 @@ export default {
     </v-card-item>
 
     <v-card-text>
-      {{song.Lyrics.split(" ").slice(0,100).join(" ") + "..."}}
+      {{song.Lyrics}}
     </v-card-text>
   </v-card>
 </template>
-
-<style scoped>
-
-</style>

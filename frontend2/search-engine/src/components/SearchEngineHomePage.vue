@@ -1,5 +1,6 @@
 <script>
 import SongCard from "@/components/SongCard.vue";
+import SongPage from "@/components/SongPage.vue";
 
 // 1.1 check that props song is working (songs are sent to SongCard)
 // 1.2 check logic for v-row
@@ -7,7 +8,7 @@ import SongCard from "@/components/SongCard.vue";
 // 3. error handling
 
 export default {
-  components: {SongCard},
+  components: {SongPage, SongCard},
   data() {
     return {
       query: null,
@@ -15,7 +16,8 @@ export default {
       song_list: [],
       submitted_query: false,
       page_number: 1,
-      total_pages: 1
+      total_pages: 1,
+      selectedSong: null
     }
   },
 
@@ -24,7 +26,7 @@ export default {
 
 
     async fetch_songs_by_query() {
-      console.log('query: ', this.query);
+      //console.log('query: ', this.query);
       try {
         if (this.query) {
           // this loading is not used for now
@@ -54,6 +56,10 @@ export default {
     onPageChange(newPage) {
       this.page_number = newPage;
       this.fetch_songs_by_query();
+    },
+    getSongPage(song){
+     this.selectedSong = song;
+
     }
   },
   watch: {
@@ -92,11 +98,9 @@ export default {
         <v-img src="https://cdn-icons-png.flaticon.com/512/3844/3844724.png"></v-img>
       </v-avatar>
     </template>
-
   </v-combobox>
 
-
-
+<div v-if="selectedSong === null">
   <div v-if="submitted_query"
        class="d-flex align-center justify-center">
     <div v-if="loading">
@@ -109,7 +113,8 @@ export default {
       <div v-if="song_list.length">
         <v-row v-for="song in song_list" :key="song.id">
           <v-col>
-            <SongCard :song="song"></SongCard>
+            <SongCard :song="song"
+                      @songCardClicked="getSongPage"></SongCard>
           </v-col>
         </v-row>
       </div>
@@ -127,5 +132,9 @@ export default {
       class="pa-4"
       @input="onPageChange"
   ></v-pagination>
+</div>
+
+  <song-page v-if="selectedSong"
+             :selectedSong="selectedSong"></song-page>
 
 </template>
