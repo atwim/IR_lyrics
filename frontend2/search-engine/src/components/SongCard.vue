@@ -5,8 +5,6 @@ export default {
   },
   methods: {
     onSongCardClick() {
-      console.log("A");
-      console.log(this.song);
       this.$emit("songCardClicked", this.song);
     }
   }

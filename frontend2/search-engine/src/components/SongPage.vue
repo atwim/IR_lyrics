@@ -1,7 +1,7 @@
 <script>
 export default {
   props: {
-    song: null
+    selectedSong: null
   }
 }
 </script>
@@ -14,16 +14,16 @@ export default {
   >
     <v-card-item>
       <v-card-title>
-        {{song.Title}}
+        {{selectedSong.Title}}
       </v-card-title>
       <v-card-subtitle>
-        {{song.Artist}}
+        {{selectedSong.Artist}}
       </v-card-subtitle>
 
     </v-card-item>
 
     <v-card-text>
-      {{song.Lyrics}}
+      {{selectedSong.Lyrics}}
     </v-card-text>
   </v-card>
 </template>

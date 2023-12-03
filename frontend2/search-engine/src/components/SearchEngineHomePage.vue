@@ -29,6 +29,7 @@ export default {
       //console.log('query: ', this.query);
       try {
         if (this.query) {
+          this.selectedSong = null;
           this.loading = true
           this.submitted_query=true
           console.log(this.page_number);
@@ -55,6 +56,8 @@ export default {
       }
 
     },
+    // TODO: how to tell the user you are in the last page? (v-pagination like component)
+    // both getPrevPage and getNextPage
     getPrevPage() {
       if(this.page_number > 1)
         this.page_number -= 1;
@@ -69,7 +72,6 @@ export default {
     },
     getSongPage(song){
      this.selectedSong = song;
-
     }
   }
 }
