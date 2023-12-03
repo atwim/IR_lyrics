@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import SearchEngineHomePage from './components/SearchEngineHomePage.vue'
+import SearchEngineHomePage from './components/SearchEngineMainComponent.vue'
 
 export default {
   name: 'App',

@@ -66,6 +66,24 @@ export default {
 </script>
 
 <template>
+<div
+    v-if="!submitted_query"
+
+    >
+    <v-img src="https://cdn-icons-png.flaticon.com/512/3844/3844724.png"
+           :width="200"
+           class="mx-auto mt-15">
+        <template v-slot:placeholder>
+          <div class="d-flex align-center justify-center fill-height">
+            <v-progress-circular
+                color="grey-lighten-4"
+                indeterminate
+            ></v-progress-circular>
+          </div>
+        </template>
+    </v-img>
+
+</div>
   <v-combobox
       auto-select-first
       class="flex-full-width pa-4"
@@ -82,10 +100,14 @@ export default {
     <template v-slot:prepend>
       <v-btn @click="fetch_songs_by_query()" icon> <v-icon>mdi-magnify</v-icon> </v-btn>
     </template>
-    <template v-slot:append>
+    <template v-slot:append v-if="submitted_query">
       <v-avatar><v-img src="https://cdn-icons-png.flaticon.com/512/3844/3844724.png"></v-img></v-avatar>
     </template>
   </v-combobox>
+
+  <h1 v-if="!submitted_query"
+      class="d-flex align-center justify-center"> Welcome to MusicLyrics!</h1>
+
 
 <div v-if="selectedSong === null">
   <div v-if="submitted_query"
