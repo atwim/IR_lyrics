@@ -2,6 +2,12 @@
 export default {
   props: {
     selectedSong: null
+  },
+  async mounted() {
+    const res = await fetch(
+        "http://localhost:8000/relevant-documents/" + this.selectedSong.docid)
+    const relevant_songs = await res.json()
+    console.log(relevant_songs)
   }
 }
 </script>
