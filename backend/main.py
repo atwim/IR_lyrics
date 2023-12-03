@@ -9,7 +9,6 @@ from fastapi_pagination.links import Page
 from fastapi_pagination import Page, add_pagination, paginate
 app = FastAPI()
 
-
 origins = [
     "http://localhost:8080",
 ]
@@ -42,12 +41,27 @@ async def search_lyrics(query:str):
 @app.get("/relevant-documents/{id}")
 async def search_lyrics(id:int):
     label = il.results.iloc[id]["cluster"]
+    r = 0.01
     # print(label)
     # print(il.results)
     response = pd.DataFrame(il.results[il.results["cluster"] == label].index, columns=["docno"])
     response = "d" + response["docno"].apply(str)
     # print(response)
     # print(il.retriever_song_title(pd.DataFrame(response)))
+    response =  il.retriever_song_title(pd.DataFrame(response, columns=["docno"]))
+    coord = il.reduced_data
+
+    cx = coord[id][0]
+    cy = coord[id][1]
+    cz = coord[id][2]
+    for point in response["docno"]:
+        x = coord[int(point[1:])][0]
+        y = coord[int(point[1:])][1]
+        z = coord[int(point[1:])][2]
+        print(response)
+        if il.check_radius(cx,cy,cz,x,y,z) > (r**2):
+            response = response[response["docno"] != point]
+    response = response.reset_index()
     return il.retriever_song_title(pd.DataFrame(response, columns=["docno"])).to_dict(orient="records")
 
     # return paginate(il.results[il.results["cluster"] == label].to_dict(orient="records"))

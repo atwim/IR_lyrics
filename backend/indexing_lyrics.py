@@ -8,6 +8,7 @@ import nltk
 import nltk
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
+import math
 nltk.download('punkt')
 
 
@@ -35,6 +36,13 @@ for i in range(0, len(data)):
   title, artist, lyrics, _ = data.iloc[i]
   docno = "d" + str(i)
   song_info.append({'docno': docno, 'artist': artist, 'title': title, 'lyrics': lyrics})
+
+
+  def check_radius(cx, cy, cz, x, y, z, ):
+    x1 = math.pow((x - cx), 2)
+    y1 = math.pow((y - cy), 2)
+    z1 = math.pow((z - cz), 2)
+    return (x1 + y1 + z1)  # distance between the centre and given point
 
 
 def get_song_title(docid):
@@ -114,6 +122,7 @@ results = pd.DataFrame()
 results['title'] = songs_data.title
 results['cluster'] = kmeans.labels_
 # print(len(results['cluster']))
+print(reduced_data)
 
 
 
