@@ -14,7 +14,8 @@ export default {
       loading: false,
       song_list: [],
       submitted_query: false,
-      page_number: 1
+      page_number: 1,
+      total_pages: 1
     }
   },
 
@@ -27,14 +28,18 @@ export default {
       try {
         if (this.query) {
           // this loading is not used for now
-
-          this.loading=true
+          this.loading = true
           this.submitted_query=true
           // this.song_list = await Search.custom("search/lyrics/" + this.query).page(1).limit(20).post()
           const res =
               await fetch("http://localhost:8000/search/lyrics/" + this.query + "/?page=" + this.page_number + "&size=50")
           const songs = await res.json()
           this.song_list = songs.items;
+          // in case we don't have a round number, give another page: 1.3 -> 2
+          // Math.ceil(songs.items.length / 10)
+          // TODO: find a way to have total_pages
+          this.total_pages = 1;
+
         }
       } catch (err) {
         // TODO: handle the error
@@ -45,6 +50,10 @@ export default {
         this.loading = false;
       }
 
+    },
+    onPageChange(newPage) {
+      this.page_number = newPage;
+      this.fetch_songs_by_query();
     }
   },
   watch: {
@@ -58,8 +67,8 @@ export default {
 </script>
 
 <template>
-  <v-combobox
 
+  <v-combobox
       auto-select-first
       class="flex-full-width pa-4"
       density="comfortable"
@@ -70,7 +79,6 @@ export default {
       clearable
       rounded
       v-model="query"
-
       theme="light"
       variant="solo"
   >
@@ -111,8 +119,13 @@ export default {
     </div>
   </div>
 
+  <v-pagination
+      v-if="total_pages > 1"
+      v-model="page_number"
+      :length="total_pages"
+      rounded="circle"
+      class="pa-4"
+      @input="onPageChange"
+  ></v-pagination>
+
 </template>
-
-<style scoped>
-
-</style>
