@@ -2,21 +2,23 @@ import scrapy
 from string import ascii_lowercase
 import time
 import json
+from scraper_api import ScraperAPIClient
+client = ScraperAPIClient('fd02e69c75265d064719fc84e866b159')
 
 
 class azlyrics(scrapy.Spider):
     name = "azlyrics"
     rotate_user_agent = True
-    allowed_domains = ["www.azlyrics.com"]
-    # start_urls = list(["https://www.azlyrics.com/" + i + ".html" for i in ascii_lowercase])
-    start_urls = ["https://www.azlyrics.com/a.html"]
+    allowed_domains = ["www.azlyrics.com", "api.scraperapi.com"]
+    start_urls = list([client.scrapyGet("https://www.azlyrics.com/" + i + ".html") for i in ascii_lowercase])
+    # start_urls = ["https://www.azlyrics.com/a.html"]
 
 
     def parse_artist_page(self,response):
         for song_title in response.xpath("//div[@class='listalbum-item']/a"):
             print(song_title.attrib["href"])
             song_page = "https://" + self.allowed_domains[0] + song_title.attrib["href"]
-            yield scrapy.Request(song_page, callback=self.parse_get_data)
+            yield scrapy.Request(client.scrapyGet(song_page), callback=self.parse_get_data)
 
     def parse_get_data(self,response):
         return {
@@ -28,7 +30,7 @@ class azlyrics(scrapy.Spider):
     def parse(self, response):
         for title in response.xpath("//div[@class='col-sm-6 text-center artist-col']/a"):
             artist_page = "https://" + self.allowed_domains[0] + "/" + title.attrib["href"]
-            yield scrapy.Request(artist_page, callback=self.parse_artist_page)
+            yield scrapy.Request(client.scrapyGet(artist_page), callback=self.parse_artist_page)
 
 
 # /html/body/div[2]/div/div[2]

@@ -10,3 +10,5 @@ java_paths
 scrapy/musiclyrics/musiclyrics/spiders/__pycache__/lyrics.cpython-38.pyc
 
 scrapy/musiclyrics/musiclyrics/spiders/__pycache__/
+
+backend/__pycache__

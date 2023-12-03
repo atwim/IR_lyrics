@@ -86,7 +86,7 @@
 #         # Must either;
 #         # - return a Response object
 #         # - return a Request object
-#         # - or raise IgnoreRequest
+#         #  - or raise IgnoreRequest
 #         return response
 #
 #     def process_exception(self, request, exception, spider):
@@ -133,3 +133,5 @@ class RotateUserAgentMiddleware(object):
             return
 
         request.headers['user-agent'] = choice(self.user_agents)
+
+

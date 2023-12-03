@@ -15,7 +15,10 @@ NEWSPIDER_MODULE = "musiclyrics.spiders"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 DOWNLOADER_MIDDLEWARES = {
+    # 'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
+    # 'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
     'musiclyrics.middlewares.RotateUserAgentMiddleware': 110,
+    'scrapy.downloadermiddlewares.retry':None
 }
 
 USER_AGENT_CHOICES = [
@@ -32,14 +35,14 @@ USER_AGENT_CHOICES = [
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 8
+CONCURRENT_REQUESTS = 20
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 2
+DOWNLOAD_DELAY = 0
 # The download delay setting will honor only one of:
-CONCURRENT_REQUESTS_PER_DOMAIN = 8
+CONCURRENT_REQUESTS_PER_DOMAIN = 20
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
@@ -80,11 +83,11 @@ CONCURRENT_REQUESTS_PER_DOMAIN = 8
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
-AUTOTHROTTLE_ENABLED = True
+AUTOTHROTTLE_ENABLED = False
 # The initial download delay
-AUTOTHROTTLE_START_DELAY = 5
+AUTOTHROTTLE_START_DELAY = 1
 # The maximum download delay to be set in case of high latencies
-#AUTOTHROTTLE_MAX_DELAY = 60
+AUTOTHROTTLE_MAX_DELAY = 60
 # The average number of requests Scrapy should be sending in parallel to
 # each remote server
 #AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
@@ -103,6 +106,11 @@ AUTOTHROTTLE_START_DELAY = 5
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+#
+# ROTATING_PROXY_LIST = [
+#     '104.248.225.143:12271'
+#     # 'proxy2.com:8031'
+# ]
 
 
 HTTPERROR_ALLOWED_CODES  =[404]
