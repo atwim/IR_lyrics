@@ -16,3 +16,5 @@ backend/__pycache__
 scrapy/musiclyrics/musiclyrics/__pycache__/
 musiclyrics/musiclyrics/__pycache__/
 /home/ma/Desktop/IR/.gitignore
+backend/__pycache__/
+backend/multi_index/data.properties
