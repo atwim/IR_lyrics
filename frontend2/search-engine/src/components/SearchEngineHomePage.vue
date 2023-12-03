@@ -1,5 +1,6 @@
 <script>
 import SongCard from "@/components/SongCard.vue";
+import SongPage from "@/components/SongPage.vue";
 
 // 1.1 check that props song is working (songs are sent to SongCard)
 // 1.2 check logic for v-row
@@ -7,14 +8,16 @@ import SongCard from "@/components/SongCard.vue";
 // 3. error handling
 
 export default {
-  components: {SongCard},
+  components: {SongPage, SongCard},
   data() {
     return {
       query: null,
       loading: false,
       song_list: [],
       submitted_query: false,
-      page_number: 1
+      page_number: 1,
+      total_pages: 0,
+      selectedSong: null
     }
   },
 
@@ -23,18 +26,25 @@ export default {
 
 
     async fetch_songs_by_query() {
-      console.log('query: ', this.query);
+      //console.log('query: ', this.query);
       try {
         if (this.query) {
-          // this loading is not used for now
-
-          this.loading=true
+          this.selectedSong = null;
+          this.loading = true
           this.submitted_query=true
-          // this.song_list = await Search.custom("search/lyrics/" + this.query).page(1).limit(20).post()
-          const res =
-              await fetch("http://localhost:8000/search/lyrics/" + this.query + "/?page=" + this.page_number + "&size=50")
+          console.log(this.page_number);
+          const res = await fetch(
+              "http://localhost:8000/search/lyrics/" +
+              this.query +
+              "/?page=" +
+              this.page_number +
+              "&size=10")
+
           const songs = await res.json()
           this.song_list = songs.items;
+          // in case we don't have a round number, give another page: 1.3 -> 2
+          this.total_pages = Math.ceil(songs.total / 10);
+
         }
       } catch (err) {
         // TODO: handle the error
@@ -45,12 +55,23 @@ export default {
         this.loading = false;
       }
 
-    }
-  },
-  watch: {
-    // function to debug the query, everytime query changes its console logged.
-    query: function(newQuery) {
-      console.log('query changed:', newQuery);
+    },
+    // TODO: how to tell the user you are in the last page? (v-pagination like component)
+    // both getPrevPage and getNextPage
+    getPrevPage() {
+      if(this.page_number > 1)
+        this.page_number -= 1;
+
+      this.fetch_songs_by_query();
+    },
+    getNextPage() {
+      if(this.page_number < this.total_pages)
+        this.page_number += 1;
+
+      this.fetch_songs_by_query();
+    },
+    getSongPage(song){
+     this.selectedSong = song;
     }
   }
 }
@@ -58,44 +79,80 @@ export default {
 </script>
 
 <template>
+
   <v-combobox
-      
       auto-select-first
-      class="flex-full-width"
+      class="flex-full-width pa-4"
       density="comfortable"
       item-props
       hide-no-data
       menu-icon=""
       placeholder="Search a lyric"
-      prepend-inner-icon="mdi-magnify"
       clearable
       rounded
       v-model="query"
-
       theme="light"
       variant="solo"
-  ></v-combobox>
+  >
+    <template v-slot:prepend>
+      <v-btn @click="fetch_songs_by_query()" icon>
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+    </template>
+    <template v-slot:append>
+      <v-avatar>
+        <v-img src="https://cdn-icons-png.flaticon.com/512/3844/3844724.png"></v-img>
+      </v-avatar>
+    </template>
+  </v-combobox>
 
-  <v-btn @click="fetch_songs_by_query()">
-    submit
-  </v-btn>
+<div v-if="selectedSong === null">
+  <div v-if="submitted_query"
+       class="d-flex align-center justify-center">
+    <div v-if="loading">
+      <v-progress-circular
+          indeterminate
+          color="red"
+      ></v-progress-circular>
+    </div>
+    <div v-else>
+      <div v-if="song_list.length">
+        <v-row v-for="song in song_list" :key="song.id">
+          <v-col>
+            <SongCard :song="song"
+                      @songCardClicked="getSongPage"></SongCard>
+          </v-col>
+        </v-row>
+      </div>
+      <div v-else>
+        <v-alert type="info" class="my-4 rounded-xl" >No match found.</v-alert>
+      </div>
+    </div>
+  </div>
 
-  <span v-if="submitted_query">
-    <span v-if="song_list.length">
-      <v-row v-for="song in song_list"
-             :key="song.id">
-        <SongCard   :song="song">
-        </SongCard>
-      </v-row>
-    </span>
+<!--  <v-pagination-->
+<!--      v-if="total_pages > 1"-->
+<!--      v-model="page_number"-->
+<!--      :length="total_pages"-->
+<!--      rounded="circle"-->
+<!--      class="pa-4"-->
+<!--      @click="onPageChange"-->
+<!--  ></v-pagination>-->
 
-    <span v-else>
-      No match found.
-    </span>
-  </span>
+    <div v-if="total_pages > 1"
+         class="d-flex align-center justify-center pa-4"
+    >
+      <v-btn @click="getPrevPage()">
+       PREV
+      </v-btn>
+      <v-btn @click="getNextPage()">
+        NEXT
+      </v-btn>
+    </div>
+
+</div>
+
+  <song-page v-if="selectedSong"
+             :selectedSong="selectedSong"></song-page>
 
 </template>
-
-<style scoped>
-
-</style>
