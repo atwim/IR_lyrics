@@ -16,7 +16,7 @@ export default {
       song_list: [],
       submitted_query: false,
       page_number: 1,
-      total_pages: 1,
+      total_pages: 0,
       selectedSong: null
     }
   },
@@ -29,18 +29,20 @@ export default {
       //console.log('query: ', this.query);
       try {
         if (this.query) {
-          // this loading is not used for now
           this.loading = true
           this.submitted_query=true
-          // this.song_list = await Search.custom("search/lyrics/" + this.query).page(1).limit(20).post()
-          const res =
-              await fetch("http://localhost:8000/search/lyrics/" + this.query + "/?page=" + this.page_number + "&size=50")
+          console.log(this.page_number);
+          const res = await fetch(
+              "http://localhost:8000/search/lyrics/" +
+              this.query +
+              "/?page=" +
+              this.page_number +
+              "&size=10")
+
           const songs = await res.json()
           this.song_list = songs.items;
           // in case we don't have a round number, give another page: 1.3 -> 2
-          // Math.ceil(songs.items.length / 10)
-          // TODO: find a way to have total_pages
-          this.total_pages = 1;
+          this.total_pages = Math.ceil(songs.total / 10);
 
         }
       } catch (err) {
@@ -53,19 +55,21 @@ export default {
       }
 
     },
-    onPageChange(newPage) {
-      this.page_number = newPage;
+    getPrevPage() {
+      if(this.page_number > 1)
+        this.page_number -= 1;
+
+      this.fetch_songs_by_query();
+    },
+    getNextPage() {
+      if(this.page_number < this.total_pages)
+        this.page_number += 1;
+
       this.fetch_songs_by_query();
     },
     getSongPage(song){
      this.selectedSong = song;
 
-    }
-  },
-  watch: {
-    // function to debug the query, everytime query changes its console logged.
-    query: function(newQuery) {
-      console.log('query changed:', newQuery);
     }
   }
 }
@@ -124,14 +128,26 @@ export default {
     </div>
   </div>
 
-  <v-pagination
-      v-if="total_pages > 1"
-      v-model="page_number"
-      :length="total_pages"
-      rounded="circle"
-      class="pa-4"
-      @input="onPageChange"
-  ></v-pagination>
+<!--  <v-pagination-->
+<!--      v-if="total_pages > 1"-->
+<!--      v-model="page_number"-->
+<!--      :length="total_pages"-->
+<!--      rounded="circle"-->
+<!--      class="pa-4"-->
+<!--      @click="onPageChange"-->
+<!--  ></v-pagination>-->
+
+    <div v-if="total_pages > 1"
+         class="d-flex align-center justify-center pa-4"
+    >
+      <v-btn @click="getPrevPage()">
+       PREV
+      </v-btn>
+      <v-btn @click="getNextPage()">
+        NEXT
+      </v-btn>
+    </div>
+
 </div>
 
   <song-page v-if="selectedSong"
