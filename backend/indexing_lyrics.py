@@ -92,8 +92,13 @@ song_info_jazz = []
 song_info_pop = []
 for i in range(0, len(data)):
   title, artist, lyrics, genre= data.iloc[i]
+  title = title.lower()
+  artist = artist.lower()
+  lyrics = lyrics.lower()
+
+
   docno = "d" + str(i)
-  song_info.append({'docno': docno, 'artist': artist, 'title': title, 'lyrics': lyrics })
+  song_info.append({'docno': docno, 'artist': artist, 'title': title, 'lyrics': lyrics, 'genre': genre})
   if genre == "Rock":
     song_info_rock.append({'docno': docno, 'artist': artist, 'title': title, 'lyrics': lyrics, 'genre': genre})
   elif genre == "Hip Hop/Rap":
@@ -114,7 +119,7 @@ indexer_pop = pt.IterDictIndexer("./multi_index_pop",meta={'docno': 20, 'title':
 
 RETRIEVAL_FIELDS = ['title', 'lyrics', 'artist']
 
-indexref1 = indexer.index(song_info, fields=RETRIEVAL_FIELDS)
+indexref1 = indexer.index(song_info, fields=RETRIEVAL_FIELDS + ["genre"])
 indexref_rap = indexer_rap.index(song_info_rap, fields=RETRIEVAL_FIELDS)
 indexref_rock = indexer_rock.index(song_info_rock, fields=RETRIEVAL_FIELDS)
 indexref_jazz = indexer_jazz.index(song_info_jazz, fields=RETRIEVAL_FIELDS)

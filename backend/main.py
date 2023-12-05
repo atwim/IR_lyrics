@@ -24,6 +24,7 @@ app.add_middleware(
 
 @app.get("/search/lyrics/{query}", response_model=Page[dict])
 async def search_lyrics(query:str, genre:Union[str,None] = None):
+    query = query.lower()
     if not genre:
         return paginate(il.retriever_song_title(il.bm25.search(query)).to_dict(orient="records"))
     elif genre == "Rock":
@@ -79,7 +80,11 @@ async def search_lyrics(id:int):
         if il.check_radius(cx,cy,cz,x,y,z) > (r**2):
             response = response[response["docno"] != point]
     response = response.reset_index()
-    return il.retriever_song_title(pd.DataFrame(response, columns=["docno"])).to_dict(orient="records")
+
+    res = il.retriever_song_title(pd.DataFrame(response, columns=["docno"]))
+    res["docid"] = res["docno"].str[1:]
+    res["docid"] = res["docid"].astype(int)
+    return res.to_dict(orient="records")
 
     # return paginate(il.results[il.results["cluster"] == label].to_dict(orient="records"))
     # return il.bm25.search(query).to_dict(orient="records")
