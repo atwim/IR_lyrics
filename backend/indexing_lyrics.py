@@ -89,6 +89,7 @@ song_info = []
 song_info_rock = []
 song_info_rap = []
 song_info_jazz = []
+song_info_pop = []
 for i in range(0, len(data)):
   title, artist, lyrics, genre= data.iloc[i]
   docno = "d" + str(i)
@@ -99,6 +100,9 @@ for i in range(0, len(data)):
     song_info_rap.append({'docno': docno, 'artist': artist, 'title': title, 'lyrics': lyrics, 'genre': genre})
   elif genre == "Jazz":
     song_info_jazz.append({'docno': docno, 'artist': artist, 'title': title, 'lyrics': lyrics, 'genre': genre})
+  elif genre == "Pop":
+    song_info_pop.append({'docno': docno, 'artist': artist, 'title': title, 'lyrics': lyrics, 'genre': genre})
+
 
 
 
@@ -106,19 +110,22 @@ indexer = pt.IterDictIndexer("./multi_index",meta={'docno': 20, 'title':10000, '
 indexer_rock = pt.IterDictIndexer("./multi_index_rock",meta={'docno': 20, 'title':10000, 'lyrics':100000, 'artist':5000},  overwrite=True)
 indexer_rap = pt.IterDictIndexer("./multi_index_rap",meta={'docno': 20, 'title':10000, 'lyrics':100000, 'artist':5000},  overwrite=True)
 indexer_jazz = pt.IterDictIndexer("./multi_index_jazz",meta={'docno': 20, 'title':10000, 'lyrics':100000, 'artist':5000},  overwrite=True)
+indexer_pop = pt.IterDictIndexer("./multi_index_pop",meta={'docno': 20, 'title':10000, 'lyrics':100000, 'artist':5000},  overwrite=True)
 
 RETRIEVAL_FIELDS = ['title', 'lyrics', 'artist']
 
 indexref1 = indexer.index(song_info, fields=RETRIEVAL_FIELDS)
 indexref_rap = indexer_rap.index(song_info_rap, fields=RETRIEVAL_FIELDS)
 indexref_rock = indexer_rock.index(song_info_rock, fields=RETRIEVAL_FIELDS)
-indexref_jazz = indexer_rock.index(song_info_jazz, fields=RETRIEVAL_FIELDS)
+indexref_jazz = indexer_jazz.index(song_info_jazz, fields=RETRIEVAL_FIELDS)
+indexref_pop = indexer_pop.index(song_info_pop, fields=RETRIEVAL_FIELDS)
 
 
 bm25 = pt.BatchRetrieve(indexref1, wmodel="BM25")
 bm25_rap = pt.BatchRetrieve(indexref_rap, wmodel="BM25")
 bm25_rock = pt.BatchRetrieve(indexref_rock, wmodel="BM25")
 bm25_jazz = pt.BatchRetrieve(indexref_jazz, wmodel="BM25")
+bm25_pop = pt.BatchRetrieve(indexref_pop, wmodel="BM25")
 
 
 # print(retriever_song_title(bm25.search("time")))

@@ -33,6 +33,9 @@ async def search_lyrics(query:str, genre:Union[str,None] = None):
         return paginate(il.retriever_song_title(il.bm25_rap.search(query)).to_dict(orient="records"))
     elif genre == "Jazz":
         return paginate(il.retriever_song_title(il.bm25_jazz.search(query)).to_dict(orient="records"))
+    elif genre == "Pop":
+        return paginate(il.retriever_song_title(il.bm25_pop.search(query)).to_dict(orient="records"))
+
 
     # return il.bm25.search(query).to_dict(orient="records")
 #
@@ -91,7 +94,7 @@ async def test_route():
 
 @app.get("/genre-list")
 async def get_genre_list():
-    return ["Jazz","Hip Hop/Rap","Rock"]
+    return ["Jazz","Hip Hop/Rap","Rock", "Pop"]
 
 add_pagination(app)
 # @app.get("/search/titles/{query}")
