@@ -2,6 +2,7 @@ import pyterrier as pt
 import pandas as pd
 import numpy as np
 import indexing_lyrics as il
+from typing import Union
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
@@ -21,15 +22,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 @app.get("/search/lyrics/{query}", response_model=Page[dict])
-async def search_lyrics(query:str):
-    return paginate(il.retriever_song_title(il.bm25.search(query)).to_dict(orient="records"))
-    # return il.bm25.search(query).to_dict(orient="records")
-
-@app.get("/search/lyrics/{genre}/{query}", response_model=Page[dict])
-async def search_lyrics(genre:str,query:str):
-    if genre == "Rock":
+async def search_lyrics(query:str, genre:Union[str,None] = None):
+    if not genre:
+        return paginate(il.retriever_song_title(il.bm25.search(query)).to_dict(orient="records"))
+    elif genre == "Rock":
         print("rock")
         return paginate(il.retriever_song_title(il.bm25_rock.search(query)).to_dict(orient="records"))
     elif genre == "Hip Hop/Rap":
@@ -37,8 +34,20 @@ async def search_lyrics(genre:str,query:str):
     elif genre == "Jazz":
         return paginate(il.retriever_song_title(il.bm25_jazz.search(query)).to_dict(orient="records"))
 
-    # return paginate(il.retriever_song_title(il.bm25.search(query)).to_dict(orient="records"))
     # return il.bm25.search(query).to_dict(orient="records")
+#
+# @app.get("/search/lyrics/{genre}/{query}", response_model=Page[dict])
+# async def search_lyrics(genre:str,query:str):
+#     if genre == "Rock":
+#         print("rock")
+#         return paginate(il.retriever_song_title(il.bm25_rock.search(query)).to_dict(orient="records"))
+#     elif genre == "Hip Hop/Rap":
+#         return paginate(il.retriever_song_title(il.bm25_rap.search(query)).to_dict(orient="records"))
+#     elif genre == "Jazz":
+#         return paginate(il.retriever_song_title(il.bm25_jazz.search(query)).to_dict(orient="records"))
+#
+#     # return paginate(il.retriever_song_title(il.bm25.search(query)).to_dict(orient="records"))
+#     # return il.bm25.search(query).to_dict(orient="records")
 
 
 @app.get("/relevant-documents/{id}")
