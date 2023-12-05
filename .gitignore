@@ -18,3 +18,5 @@ musiclyrics/musiclyrics/__pycache__/
 /home/ma/Desktop/IR/.gitignore
 backend/__pycache__/
 backend/multi_index/data.properties
+./backend/__pycache__/
+./scrapy/musiclyrics/musiclyrics/spiders/__pycache__/

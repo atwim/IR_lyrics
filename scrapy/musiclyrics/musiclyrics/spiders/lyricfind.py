@@ -63,12 +63,12 @@ class lyricfind(scrapy.Spider):
         letter = response.url.split("/")[-1]
         url = f'https://lyrics.lyricfind.com/api/v1/metadata?reqtype=listlyrics&letter={letter}&limit=20&territory=CH&output=json&offset=140'
         yield scrapy.Request(url=url, callback=self.parse_aux)
-        # for song in response.xpath("//div[@class='MuiBox-root css-18hgwaj']/a[@class='css-11g9kr1']"):
-        #     # print(song.attrib["href"])
-        #     if song is not None:
-        #         # next_page = "https://lyrics.lyricfind.com" + song.attrib["href"]
-        #         url = f'https://lyrics.lyricfind.com/_next/data/ruqb0mkwHRwCTAAbYcEET/en-US/lyrics/{song.attrib["href"].split("/")[2]}.json?songId={song.attrib["href"].split("/")[2]}'
-        #         # url = f'https://lyrics.lyricfind.com /_next/data/ruqb0mkwHRwCTAAbYcEET/en-US/lyrics/ michael - skerbec - a.json?songId = michael - skerbec - a
-        #         yield scrapy.Request(url=url, callback=self.parse_get_data)
-        # url = f'https://lyrics.lyricfind.com/api/v1/metadata?reqtype=listlyrics&letter={letter}&limit=20&territory=CH&output=json&offset=140'
-        # yield scrapy.Request(url=url, callback=self.parse)
+        for song in response.xpath("//div[@class='MuiBox-root css-18hgwaj']/a[@class='css-11g9kr1']"):
+            # print(song.attrib["href"])
+            if song is not None:
+                # next_page = "https://lyrics.lyricfind.com" + song.attrib["href"]
+                url = f'https://lyrics.lyricfind.com/_next/data/ruqb0mkwHRwCTAAbYcEET/en-US/lyrics/{song.attrib["href"].split("/")[2]}.json?songId={song.attrib["href"].split("/")[2]}'
+                # url = f'https://lyrics.lyricfind.com /_next/data/ruqb0mkwHRwCTAAbYcEET/en-US/lyrics/ michael - skerbec - a.json?songId = michael - skerbec - a
+                yield scrapy.Request(url=url, callback=self.parse_get_data)
+        url = f'https://lyrics.lyricfind.com/api/v1/metadata?reqtype=listlyrics&letter={letter}&limit=20&territory=CH&output=json&offset=140'
+        yield scrapy.Request(url=url, callback=self.parse)
