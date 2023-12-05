@@ -19,4 +19,4 @@ musiclyrics/musiclyrics/__pycache__/
 backend/__pycache__/
 backend/multi_index/data.properties
 ./backend/__pycache__/
-./scrapy/musiclyrics/musiclyrics/spiders/__pycache__/
+./  scrapy/musiclyrics/musiclyrics/spiders/__pycache__/

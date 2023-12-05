@@ -78,6 +78,12 @@ async def search_lyrics(id:int):
 async def test_route():
     return "yes"
 
+
+
+@app.get("/genre-list")
+async def get_genre_list():
+    return ["Jazz","Hip Hop/Rap","Rock"]
+
 add_pagination(app)
 # @app.get("/search/titles/{query}")
 # async def search_lyrics(query: str):
