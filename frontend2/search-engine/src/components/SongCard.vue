@@ -1,7 +1,8 @@
 <script>
 export default {
   props: {
-    song: null
+    song: null,
+    isRelevantList: Boolean
   },
   methods: {
     onSongCardClick() {
@@ -15,8 +16,9 @@ export default {
 <template>
   <v-card
       @click="onSongCardClick"
-      class="mx-auto my-8 rounded-xl"
+      class="mx-auto my-8 rounded-xl "
       max-width="700"
+      style="white-space: pre-wrap; text-align: center"
       elevation="16"
   >
     <v-card-item>
@@ -24,6 +26,6 @@ export default {
       <v-card-subtitle> {{song.Artist}} </v-card-subtitle>
     </v-card-item>
 
-    <v-card-text> {{song.Lyrics.split(" ").slice(0,100).join(" ") + "..."}} </v-card-text>
+    <v-card-text v-if="!isRelevantList"> {{song.Lyrics.split(" ").slice(0,100).join(" ") + "..."}} </v-card-text>
   </v-card>
 </template>
