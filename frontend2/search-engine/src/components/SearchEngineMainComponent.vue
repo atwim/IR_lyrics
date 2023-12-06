@@ -87,6 +87,10 @@ export default {
       this.total_pages = 0,
       this.selectedGenre = '',
       this.selectedSong = null
+    },
+    enterNewQuery(){
+      this.fetch_songs_by_query();
+      this.page_number = 1
     }
   }
 }
@@ -124,9 +128,10 @@ export default {
       rounded
       v-model="query"
       theme="light"
+      @keyup.enter="enterNewQuery()"
       variant="solo">
     <template v-slot:prepend>
-      <v-btn @click="fetch_songs_by_query(); this.page_number = 1" icon> <v-icon>mdi-magnify</v-icon> </v-btn>
+      <v-btn @click="enterNewQuery()" icon> <v-icon>mdi-magnify</v-icon> </v-btn>
     </template>
     <template v-slot:append v-if="submitted_query">
      <v-btn @click="returnToHomePage()" icon>  <v-avatar><v-img src="https://cdn-icons-png.flaticon.com/512/3844/3844724.png"></v-img></v-avatar></v-btn>
