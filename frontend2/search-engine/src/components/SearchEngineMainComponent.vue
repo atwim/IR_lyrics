@@ -46,7 +46,7 @@ export default {
           this.submitted_query=true
 
           const res = await fetch(
-              "http://localhost:8000/search/lyrics/" + this.query + "/?page=" + this.page_number + "&size=10")
+              "http://localhost:8000/search/lyrics/" + this.query + "/?genre="+this.selectedGenre+"&page=" + this.page_number + "&size=10")
           const songs = await res.json()
           this.song_list = songs.items;
           // in case we don't have a round number, give another page: 1.3 -> 2
