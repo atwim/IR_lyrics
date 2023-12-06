@@ -22,6 +22,7 @@ export default {
   },
   watch: {
       query(newQuery, oldQuery){
+      console.log(this.loading)
       if(newQuery !== oldQuery && this.loading === true)
         this.page_number = 1;
     }
@@ -125,7 +126,7 @@ export default {
       theme="light"
       variant="solo">
     <template v-slot:prepend>
-      <v-btn @click="fetch_songs_by_query()" icon> <v-icon>mdi-magnify</v-icon> </v-btn>
+      <v-btn @click="fetch_songs_by_query(); this.page_number = 1" icon> <v-icon>mdi-magnify</v-icon> </v-btn>
     </template>
     <template v-slot:append v-if="submitted_query">
      <v-btn @click="returnToHomePage()" icon>  <v-avatar><v-img src="https://cdn-icons-png.flaticon.com/512/3844/3844724.png"></v-img></v-avatar></v-btn>
