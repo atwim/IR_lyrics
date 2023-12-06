@@ -145,7 +145,7 @@ export default {
     <p style="text-align: center" class="pa-2"> Search by genre: </p>
   </div>
 
-<div v-if="!submitted_query" class="d-flex justify-center ma-4">
+<div  class="d-flex justify-center ma-4">
   <v-btn class="mr-4"  @click="selectedGenre = genre_list[0]">{{genre_list[0]}}</v-btn>
   <v-btn class="mr-4"  @click="selectedGenre = genre_list[1]">{{genre_list[1]}}</v-btn>
   <v-btn class="mr-4"  @click="selectedGenre = genre_list[2]">{{genre_list[2]}}</v-btn>
@@ -153,7 +153,7 @@ export default {
   <v-btn class="mr-4"  @click="selectedGenre = ''"> Remove filters </v-btn>
 </div>
 
-  <div v-if="selectedGenre && selectedSong === null">
+  <div v-if="selectedGenre ">
     <p style="text-align: center" > Search songs in the {{ selectedGenre }} Genre </p>
   </div>
 
